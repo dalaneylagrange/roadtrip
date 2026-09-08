@@ -828,14 +828,27 @@
     }
 
     .photo-lightbox.has-image .lightbox-frame {
-      background: #141f1b;
+      width: auto;
+      height: auto;
+      max-width: calc(100vw - clamp(36px, 10vw, 144px));
+      max-height: calc(100svh - clamp(80px, 12vw, 160px));
+      aspect-ratio: auto;
+      overflow: visible;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
     }
 
     .lightbox-image {
       display: none;
-      width: 100%;
-      height: 100%;
+      width: auto;
+      height: auto;
+      max-width: calc(100vw - clamp(36px, 10vw, 144px));
+      max-height: calc(100svh - clamp(80px, 12vw, 160px));
       object-fit: contain;
+      object-position: center;
+      border-radius: 8px;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.36);
     }
 
     .photo-lightbox.has-image .lightbox-image {
@@ -1659,35 +1672,36 @@
       ];
 
       const britishColumbiaPhotos = [
-        "Photos/BC/IMG_1685.jpg",
-        "Photos/BC/IMG_1693.jpg",
-        "Photos/BC/IMG_1699.jpg",
-        "Photos/BC/IMG_1719.jpg",
-        "Photos/BC/IMG_1765.jpg",
-        "Photos/BC/IMG_1817.jpg",
-        "Photos/BC/IMG_1849.JPG",
-        "Photos/BC/IMG_1857.JPG",
-        "Photos/BC/IMG_1870.JPG",
-        "Photos/BC/IMG_1873.JPG",
-        "Photos/BC/IMG_1875.JPG",
-        "Photos/BC/IMG_1884.JPG",
-        "Photos/BC/IMG_1888.JPG",
-        "Photos/BC/IMG_1891.JPG",
-        "Photos/BC/IMG_1914.JPG",
-        "Photos/BC/IMG_1921.JPG",
-        "Photos/BC/IMG_1948.JPG",
-        "Photos/BC/IMG_1971.JPG",
-        "Photos/BC/IMG_1988.JPG",
-        "Photos/BC/IMG_1995.JPG",
-        "Photos/BC/IMG_2016.JPG",
-        "Photos/BC/IMG_2046.JPG",
-        "Photos/BC/IMG_2056.JPG",
-        "Photos/BC/IMG_2062.JPG",
-        "Photos/BC/IMG_2068.JPG",
-        "Photos/BC/IMG_2110.JPG",
-        "Photos/BC/IMG_2120.JPG"
+        "IMG_1685.jpg",
+        "IMG_1693.jpg",
+        "IMG_1699.jpg",
+        "IMG_1719.jpg",
+        "IMG_1765.jpg",
+        "IMG_1817.jpg",
+        "IMG_1849.JPG",
+        "IMG_1857.JPG",
+        "IMG_1870.JPG",
+        "IMG_1873.JPG",
+        "IMG_1875.JPG",
+        "IMG_1884.JPG",
+        "IMG_1888.JPG",
+        "IMG_1891.JPG",
+        "IMG_1914.JPG",
+        "IMG_1921.JPG",
+        "IMG_1948.JPG",
+        "IMG_1971.JPG",
+        "IMG_1988.JPG",
+        "IMG_1995.JPG",
+        "IMG_2016.JPG",
+        "IMG_2046.JPG",
+        "IMG_2056.JPG",
+        "IMG_2062.JPG",
+        "IMG_2068.JPG",
+        "IMG_2110.JPG",
+        "IMG_2120.JPG"
       ].map((src, index) => ({
-        src,
+        src: `Photos/BC/full/${src}`,
+        thumbSrc: `Photos/BC/thumbs/${src}`,
         label: `British Columbia photo ${String(index + 1).padStart(2, "0")}`
       }));
 
@@ -2086,7 +2100,7 @@
 
         if (photo.src) {
           const image = document.createElement("img");
-          image.src = photo.src;
+          image.src = photo.thumbSrc || photo.src;
           image.alt = label;
           image.loading = "lazy";
           image.decoding = "async";
