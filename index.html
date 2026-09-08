@@ -34,9 +34,12 @@
       margin: 0;
       min-height: 100svh;
       background:
+        linear-gradient(rgba(33, 29, 25, 0.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(33, 29, 25, 0.018) 1px, transparent 1px),
         radial-gradient(circle at 12% 16%, rgba(216, 165, 65, 0.18), transparent 22rem),
         radial-gradient(circle at 84% 78%, rgba(39, 127, 120, 0.16), transparent 24rem),
         linear-gradient(135deg, #f7f1ea 0%, #efe4d2 48%, #f8f4ec 100%);
+      background-size: 54px 54px, 54px 54px, auto, auto, auto;
       color: var(--ink);
       font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
@@ -56,7 +59,7 @@
       height: 100svh;
       min-height: 100svh;
       display: grid;
-      grid-template-columns: minmax(280px, 350px) minmax(0, 1020px);
+      grid-template-columns: minmax(330px, 440px) minmax(0, 980px);
       align-items: start;
       justify-content: center;
       gap: clamp(18px, 2.6vw, 46px);
@@ -70,6 +73,9 @@
       top: clamp(42px, 5.4svh, 72px);
       z-index: 2;
       align-self: start;
+      justify-self: center;
+      width: 100%;
+      max-width: 440px;
       display: block;
       padding-top: 0;
     }
@@ -106,13 +112,13 @@
 
     .trip-dashboard {
       margin-top: 24px;
-      max-width: 330px;
+      max-width: 440px;
       border-top: 2px solid rgba(33, 29, 25, 0.32);
     }
 
     .intro-note {
       margin: 18px 0 0;
-      max-width: 320px;
+      max-width: 430px;
       color: var(--muted);
       font-size: 0.98rem;
       line-height: 1.58;
@@ -143,17 +149,16 @@
 
     .route-controls {
       margin-top: 22px;
-      max-width: 330px;
+      max-width: 440px;
     }
 
     .timeline-control {
       --timeline-progress: 0%;
       display: grid;
-      gap: 9px;
+      gap: 8px;
     }
 
-    .timeline-readout,
-    .timeline-range {
+    .timeline-readout {
       display: flex;
       align-items: baseline;
       justify-content: space-between;
@@ -225,16 +230,11 @@
       box-shadow: 0 6px 18px rgba(20, 35, 31, 0.24);
     }
 
-    .timeline-range {
-      color: var(--muted);
-      font-size: 0.78rem;
-      font-weight: 760;
-      line-height: 1.2;
-    }
-
     .map-pane {
       display: grid;
       place-items: center;
+      justify-self: center;
+      width: 100%;
       min-width: 0;
       min-height: 0;
     }
@@ -369,6 +369,137 @@
       box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22);
     }
 
+    .region-picker {
+      position: fixed;
+      top: clamp(18px, 2.8vw, 30px);
+      right: clamp(18px, 3vw, 38px);
+      z-index: 8;
+      width: min(300px, calc(100vw - 36px));
+      transition: opacity 160ms ease, visibility 160ms ease;
+    }
+
+    body.detail-open .region-picker {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .region-search-wrap {
+      position: relative;
+    }
+
+    .region-search-wrap::before {
+      content: "";
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      width: 10px;
+      height: 10px;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+      color: rgba(33, 29, 25, 0.48);
+      pointer-events: none;
+    }
+
+    .region-search-wrap::after {
+      content: "";
+      position: absolute;
+      top: 27px;
+      left: 25px;
+      width: 7px;
+      height: 2px;
+      border-radius: 999px;
+      background: rgba(33, 29, 25, 0.48);
+      pointer-events: none;
+      transform: rotate(45deg);
+      transform-origin: left center;
+    }
+
+    .region-search {
+      width: 100%;
+      min-height: 44px;
+      padding: 0 14px 0 38px;
+      border: 1px solid rgba(33, 29, 25, 0.24);
+      border-radius: 8px;
+      appearance: none;
+      background: transparent;
+      color: var(--deep);
+      font: inherit;
+      font-size: 0.9rem;
+      font-weight: 760;
+      line-height: 1.2;
+      box-shadow: none;
+    }
+
+    .region-search::placeholder {
+      color: transparent;
+    }
+
+    .region-search:focus::placeholder {
+      color: rgba(33, 29, 25, 0.55);
+    }
+
+    .region-search:hover {
+      border-color: #E9A82C;
+    }
+
+    .region-search:focus-visible {
+      outline: 2px solid #E9A82C;
+      outline-offset: 3px;
+    }
+
+    .region-results {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      z-index: 12;
+      display: grid;
+      width: 100%;
+      max-height: min(330px, 54svh);
+      padding: 6px;
+      overflow: auto;
+      border: 1px solid rgba(33, 29, 25, 0.18);
+      border-radius: 8px;
+      background: rgba(255, 250, 243, 0.98);
+      box-shadow: none;
+    }
+
+    .region-results[hidden] {
+      display: none;
+    }
+
+    .region-result-button,
+    .region-result-empty {
+      min-height: 38px;
+      padding: 0 10px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--deep);
+      font: inherit;
+      font-size: 0.88rem;
+      line-height: 1.2;
+      text-align: left;
+    }
+
+    .region-result-button {
+      cursor: pointer;
+    }
+
+    .region-result-button:hover,
+    .region-result-button:focus-visible,
+    .region-result-button.is-highlighted {
+      background: transparent;
+      box-shadow: inset 0 0 0 1px #E9A82C;
+      outline: none;
+    }
+
+    .region-result-empty {
+      display: flex;
+      align-items: center;
+      color: var(--muted);
+    }
+
     .detail-view {
       position: fixed;
       inset: 0;
@@ -417,15 +548,47 @@
       cursor: pointer;
     }
 
+    .detail-nav {
+      position: absolute;
+      top: 26px;
+      right: 28px;
+      z-index: 2;
+      display: flex;
+      gap: 10px;
+    }
+
+    .detail-nav-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 0 14px;
+      border: 1px solid rgba(33, 29, 25, 0.24);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--deep);
+      font-weight: 760;
+      cursor: pointer;
+      box-shadow: none;
+    }
+
+    .detail-nav-button:hover,
+    .detail-nav-button:focus-visible {
+      border-color: #E9A82C;
+      background: transparent;
+      color: #E9A82C;
+      outline: none;
+    }
+
     .detail-map-wrap {
       display: grid;
       place-items: center;
-      min-height: min(680px, 70svh);
+      min-height: min(760px, 74svh);
     }
 
     .detail-map {
-      width: min(100%, 760px);
-      height: min(72svh, 760px);
+      width: min(100%, 820px);
+      height: min(74svh, 820px);
       display: block;
       overflow: visible;
       color: var(--detail-accent, var(--coral));
@@ -444,48 +607,49 @@
       max-width: 620px;
     }
 
+    .detail-copy > .detail-overline {
+      margin-bottom: 12px;
+    }
+
     .detail-view.story-open {
-      grid-template-columns: minmax(220px, 0.72fr) minmax(340px, 1fr);
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+      grid-template-rows: minmax(calc(100svh - 144px), auto) auto;
       align-content: start;
-      align-items: start;
-      gap: 30px 46px;
-      padding-top: 92px;
+      align-items: center;
+      gap: 44px;
+      padding: 80px 72px 64px;
     }
 
     .detail-view.story-open .detail-map-wrap {
-      align-self: start;
-      min-height: 0;
+      align-self: center;
+      min-height: min(760px, 74svh);
     }
 
     .detail-view.story-open .detail-map {
-      width: min(100%, 430px);
-      height: min(34svh, 360px);
+      width: min(100%, 820px);
+      height: min(74svh, 820px);
     }
 
     .detail-view.story-open .detail-copy {
-      align-self: start;
-      max-width: 720px;
-      padding-top: clamp(4px, 2.2svh, 28px);
+      align-self: center;
+      max-width: 620px;
+      padding-top: 0;
     }
 
     .detail-view.story-open .detail-title {
-      font-size: 5.6rem;
-    }
-
-    .detail-script {
-      color: var(--deep);
-      font-family: "Bradley Hand", "Segoe Script", "Snell Roundhand", cursive;
-      font-size: 2rem;
-      line-height: 1.1;
+      --detail-title-base-size: 5.8rem;
     }
 
     .detail-title {
-      margin-top: 6px;
+      --detail-title-base-size: 5.8rem;
+      margin-top: 0;
       color: var(--detail-accent, var(--coral));
-      font-size: 5.8rem;
+      font-size: var(--detail-title-base-size);
       font-weight: 900;
       line-height: 0.88;
-      overflow-wrap: anywhere;
+      overflow-wrap: normal;
+      word-break: normal;
+      hyphens: none;
       text-transform: uppercase;
     }
 
@@ -527,9 +691,8 @@
       grid-column: 1 / -1;
       justify-self: center;
       width: min(100%, 760px);
-      margin-top: 8px;
-      padding-top: 36px;
-      border-top: 1px solid rgba(33, 29, 25, 0.32);
+      margin-top: 0;
+      padding-top: 12px;
     }
 
     .state-story[hidden] {
@@ -541,6 +704,13 @@
       color: var(--deep);
       font-size: 3rem;
       line-height: 1.05;
+    }
+
+    .story-intro {
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 1.04rem;
+      line-height: 1.72;
     }
 
     .story-section {
@@ -576,6 +746,8 @@
     }
 
     .story-photo {
+      position: relative;
+      overflow: hidden;
       display: grid;
       place-items: center;
       margin: 0;
@@ -584,9 +756,7 @@
       padding: 0;
       border: 1px solid rgba(33, 29, 25, 0.22);
       border-radius: 8px;
-      background:
-        linear-gradient(135deg, rgba(255, 250, 243, 0.56), rgba(216, 165, 65, 0.16)),
-        rgba(255, 250, 243, 0.34);
+      background: transparent;
       color: rgba(33, 29, 25, 0.5);
       font-size: 0.76rem;
       font-weight: 760;
@@ -597,12 +767,22 @@
       transition: border-color 160ms ease, color 160ms ease, transform 160ms ease, background 160ms ease;
     }
 
+    .story-photo.has-image {
+      border-color: transparent;
+      background: rgba(33, 29, 25, 0.08);
+    }
+
+    .story-photo img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
     .story-photo:hover,
     .story-photo:focus-visible {
       border-color: #E9A82C;
-      background:
-        linear-gradient(135deg, rgba(255, 250, 243, 0.72), rgba(212, 108, 63, 0.24)),
-        rgba(255, 250, 243, 0.48);
+      background: transparent;
       color: var(--deep);
       transform: translateY(-1px);
     }
@@ -636,6 +816,8 @@
       place-items: center;
       width: min(100%, 980px);
       aspect-ratio: 16 / 10;
+      max-height: calc(100svh - 120px);
+      overflow: hidden;
       border: 1px solid rgba(255, 250, 243, 0.34);
       border-radius: 8px;
       background:
@@ -643,6 +825,25 @@
         #595959;
       color: rgba(255, 250, 243, 0.78);
       box-shadow: 0 30px 90px rgba(0, 0, 0, 0.36);
+    }
+
+    .photo-lightbox.has-image .lightbox-frame {
+      background: #141f1b;
+    }
+
+    .lightbox-image {
+      display: none;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .photo-lightbox.has-image .lightbox-image {
+      display: block;
+    }
+
+    .photo-lightbox.has-image .lightbox-placeholder {
+      display: none;
     }
 
     .lightbox-placeholder {
@@ -660,22 +861,23 @@
       padding: 0 14px;
       border: 1px solid rgba(255, 250, 243, 0.42);
       border-radius: 8px;
-      background: rgba(255, 250, 243, 0.96);
-      color: var(--deep);
+      background: transparent;
+      color: #fffaf3;
       font-weight: 760;
       cursor: pointer;
     }
 
     .lightbox-close:hover,
     .lightbox-close:focus-visible {
-      background: #fffaf3;
-      outline: 2px solid #E9A82C;
-      outline-offset: 3px;
+      border-color: #E9A82C;
+      background: transparent;
+      color: #E9A82C;
+      outline: none;
     }
 
     @media (max-width: 1100px) {
       .map-page {
-        grid-template-columns: minmax(250px, 330px) minmax(0, 1fr);
+        grid-template-columns: minmax(280px, 370px) minmax(0, 1fr);
         gap: 18px;
         padding-inline: 28px;
       }
@@ -692,8 +894,9 @@
         grid-template-columns: 1fr;
         grid-template-areas:
           "header"
-          "map"
           "controls"
+          "picker"
+          "map"
           "dashboard";
         align-items: start;
         gap: 18px;
@@ -714,15 +917,18 @@
         padding-top: 0;
       }
 
-      .intro-note {
-        max-width: 42rem;
-      }
-
       .route-controls {
         grid-area: controls;
         width: min(100%, 680px);
         max-width: none;
         margin-top: 0;
+        justify-self: center;
+      }
+
+      .region-picker {
+        grid-area: picker;
+        position: static;
+        width: min(100%, 680px);
         justify-self: center;
       }
 
@@ -747,8 +953,7 @@
         padding: 10px 0;
       }
 
-      .trip-stat:first-child,
-      .trip-stat:nth-child(2) {
+      .trip-stat:first-child {
         grid-column: 1 / -1;
         flex-direction: row;
         align-items: baseline;
@@ -782,8 +987,9 @@
 
       .detail-view.story-open {
         grid-template-columns: 1fr;
-        gap: 18px;
-        padding-top: 76px;
+        grid-template-rows: auto;
+        gap: 22px;
+        padding: 70px 28px 42px;
       }
 
       .detail-map-wrap {
@@ -795,7 +1001,8 @@
       }
 
       .detail-view.story-open .detail-map {
-        height: min(34svh, 300px);
+        width: min(100%, 820px);
+        height: 42svh;
       }
 
       .detail-view.story-open .detail-copy {
@@ -803,11 +1010,11 @@
       }
 
       .detail-view.story-open .detail-title {
-        font-size: 3.8rem;
+        --detail-title-base-size: 3.8rem;
       }
 
       .detail-title {
-        font-size: 3.8rem;
+        --detail-title-base-size: 3.8rem;
       }
 
       .story-title {
@@ -858,19 +1065,18 @@
         font-size: 0.72rem;
       }
 
+      .trip-stats {
+        grid-template-columns: 1fr;
+      }
+
       .intro-note {
         margin-top: 14px;
         font-size: 0.94rem;
         line-height: 1.5;
       }
 
-      .trip-stats {
-        grid-template-columns: 1fr;
-      }
-
       .trip-stat,
-      .trip-stat:first-child,
-      .trip-stat:nth-child(2) {
+      .trip-stat:first-child {
         align-items: flex-start;
         flex-direction: column;
         gap: 6px;
@@ -897,20 +1103,33 @@
       }
 
       .detail-view {
-        padding: 68px 20px 34px;
+        padding: 68px 20px 100px;
       }
 
       .back-button {
         left: 20px;
       }
 
-      .detail-script {
-        font-size: 1.55rem;
+      .detail-nav {
+        position: fixed;
+        top: auto;
+        right: 18px;
+        bottom: 18px;
+        left: 18px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .detail-nav-button {
+        min-height: 46px;
+        background: transparent;
+        box-shadow: none;
       }
 
       .detail-title,
       .detail-view.story-open .detail-title {
-        font-size: 2.65rem;
+        --detail-title-base-size: 2.65rem;
       }
 
       .stats {
@@ -983,9 +1202,8 @@
       <div class="map-sidebar">
         <header class="map-header">
           <div class="intro-copy">
-            <p class="eyebrow">Dalaney & Bonita's 2018</p>
             <h1>North America Roadtrip</h1>
-            <p class="intro-note">In January of 2018 Dalaney and Bonita embarked on an epic journey around North America. Their goal was to hit as many states and provinces as they could in a year in their little converted van.</p>
+            <p class="intro-note">In January of 2018 Dalaney and Bonita embarked on an epic journey around North America in their little converted van.</p>
           </div>
         </header>
         <div class="route-controls">
@@ -995,10 +1213,6 @@
               <strong data-route-date>Jan 1, 2018</strong>
             </div>
             <input class="route-slider" type="range" min="0" max="100" step="0.1" value="0" aria-label="Trip timeline" data-route-slider>
-            <div class="timeline-range">
-              <span data-route-start-date>Jan 1</span>
-              <span data-route-end-date>Nov 11</span>
-            </div>
           </div>
         </div>
         <div class="trip-dashboard" aria-label="Trip overview">
@@ -1006,10 +1220,6 @@
             <div class="trip-stat">
               <span class="stat-label">Current location</span>
               <strong data-route-current-stop>Edmonton, Alberta</strong>
-            </div>
-            <div class="trip-stat">
-              <span class="stat-label">Trip date</span>
-              <strong data-route-date>Jan 1, 2018</strong>
             </div>
             <div class="trip-stat">
               <span class="stat-label">Days on the road</span>
@@ -1020,10 +1230,6 @@
               <strong data-route-kms>0 km</strong>
             </div>
             <div class="trip-stat">
-              <span class="stat-label">Total Miles</span>
-              <strong data-route-miles>0 miles</strong>
-            </div>
-            <div class="trip-stat">
               <span class="stat-label">States visited</span>
               <strong data-route-states>0</strong>
             </div>
@@ -1032,6 +1238,13 @@
               <strong data-route-provinces>0</strong>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div class="region-picker">
+        <div class="region-search-wrap" data-region-picker>
+          <input class="region-search" type="search" placeholder="" data-search-placeholder="Search states/provinces" aria-label="Search states or provinces" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="regionResults" data-region-search>
+          <div class="region-results" id="regionResults" role="listbox" data-region-results hidden></div>
         </div>
       </div>
 
@@ -1146,12 +1359,15 @@
 
     <section class="detail-view" data-detail-view aria-hidden="true" aria-live="polite">
       <button class="back-button" type="button" data-close-detail>Back to map</button>
+      <div class="detail-nav" aria-label="State and province navigation">
+        <button class="detail-nav-button" type="button" data-detail-previous>Previous</button>
+        <button class="detail-nav-button" type="button" data-detail-next>Next</button>
+      </div>
       <div class="detail-map-wrap" aria-hidden="true">
         <svg class="detail-map" data-detail-map viewBox="0 0 100 100"></svg>
       </div>
       <div class="detail-copy">
-        <p class="detail-overline" data-detail-type>Canada - Canadian province</p>
-        <p class="detail-script">Our roadtrip in</p>
+        <p class="detail-overline" data-detail-order>Province #1</p>
         <h2 class="detail-title" data-detail-title>Alberta</h2>
         <div class="stats">
           <div class="stat">
@@ -1159,72 +1375,18 @@
             <span class="stat-value" data-detail-dates>To be filled</span>
           </div>
           <div class="stat">
-            <span class="stat-label" data-detail-distance-label>Total KMs</span>
-            <span class="stat-value" data-detail-distance>To be filled</span>
+            <span class="stat-label">Cumulative KMs</span>
+            <span class="stat-value" data-detail-kms>To be filled</span>
           </div>
         </div>
         <p class="detail-placeholder" data-detail-placeholder>Route notes, stops, photos, and small illustrated moments can live here later.</p>
       </div>
-      <article class="state-story" data-state-story hidden>
-        <p class="detail-overline">Example article</p>
-        <h3 class="story-title">Outer Banks To Blue Ridge</h3>
-        <section class="story-section">
-          <div class="story-copy">
-            <h4>Outer Banks arrival</h4>
-            <p>Placeholder copy for the first stretch through North Carolina. This can hold the setup for the day, what the drive felt like, the weather, and the little details that made the stop memorable.</p>
-          </div>
-          <button class="story-photo is-wide" type="button" data-photo-fullscreen data-photo-label="North Carolina photo 01">
-            <span>Photo 01</span>
-          </button>
-        </section>
-        <section class="story-section">
-          <div class="story-copy">
-            <h4>Coast to Raleigh</h4>
-            <p>Placeholder copy for the middle of the state. Add notes about the beach, the road inland, where you stayed, favorite meals, odd stops, and anything you want remembered in sequence.</p>
-          </div>
-          <div class="story-photos" aria-label="North Carolina photo placeholders">
-            <button class="story-photo" type="button" data-photo-fullscreen data-photo-label="North Carolina photo 02">
-              <span>Photo 02</span>
-            </button>
-            <button class="story-photo" type="button" data-photo-fullscreen data-photo-label="North Carolina photo 03">
-              <span>Photo 03</span>
-            </button>
-            <button class="story-photo" type="button" data-photo-fullscreen data-photo-label="North Carolina photo 04">
-              <span>Photo 04</span>
-            </button>
-            <button class="story-photo" type="button" data-photo-fullscreen data-photo-label="North Carolina photo 05">
-              <span>Photo 05</span>
-            </button>
-          </div>
-        </section>
-        <section class="story-section">
-          <div class="story-copy">
-            <h4>Blue Ridge detour</h4>
-            <p>Placeholder copy for Asheville and the mountain side of the visit. This is a good spot for a short reflection, a route note, or a mini story that sits beside the photo set.</p>
-          </div>
-          <button class="story-photo is-wide" type="button" data-photo-fullscreen data-photo-label="North Carolina photo 06">
-            <span>Photo 06</span>
-          </button>
-          <div class="story-photos" aria-label="More North Carolina photo placeholders">
-            <button class="story-photo" type="button" data-photo-fullscreen data-photo-label="North Carolina photo 07">
-              <span>Photo 07</span>
-            </button>
-            <button class="story-photo" type="button" data-photo-fullscreen data-photo-label="North Carolina photo 08">
-              <span>Photo 08</span>
-            </button>
-            <button class="story-photo" type="button" data-photo-fullscreen data-photo-label="North Carolina photo 09">
-              <span>Photo 09</span>
-            </button>
-            <button class="story-photo" type="button" data-photo-fullscreen data-photo-label="North Carolina photo 10">
-              <span>Photo 10</span>
-            </button>
-          </div>
-        </section>
-      </article>
+      <article class="state-story" data-state-story hidden></article>
     </section>
     <div class="photo-lightbox" data-photo-lightbox role="dialog" aria-modal="true" aria-hidden="true" hidden>
       <button class="lightbox-close" type="button" data-photo-lightbox-close>Close</button>
       <div class="lightbox-frame">
+        <img class="lightbox-image" data-photo-lightbox-image alt="">
         <div class="lightbox-placeholder" data-photo-lightbox-label>Photo placeholder</div>
       </div>
     </div>
@@ -1237,26 +1399,29 @@
       const tooltip = document.querySelector("[data-tooltip]");
       const detailView = document.querySelector("[data-detail-view]");
       const detailMap = document.querySelector("[data-detail-map]");
+      const detailOrderEl = document.querySelector("[data-detail-order]");
       const detailTitleEl = document.querySelector("[data-detail-title]");
-      const detailTypeEl = document.querySelector("[data-detail-type]");
       const detailDatesEl = document.querySelector("[data-detail-dates]");
-      const detailDistanceEl = document.querySelector("[data-detail-distance]");
+      const detailKmsEl = document.querySelector("[data-detail-kms]");
       const detailPlaceholderEl = document.querySelector("[data-detail-placeholder]");
       const stateStoryEl = document.querySelector("[data-state-story]");
       const photoLightbox = document.querySelector("[data-photo-lightbox]");
+      const photoLightboxImage = document.querySelector("[data-photo-lightbox-image]");
       const photoLightboxLabel = document.querySelector("[data-photo-lightbox-label]");
       const photoLightboxCloseButton = document.querySelector("[data-photo-lightbox-close]");
       const closeDetailButton = document.querySelector("[data-close-detail]");
+      const detailPreviousButton = document.querySelector("[data-detail-previous]");
+      const detailNextButton = document.querySelector("[data-detail-next]");
+      const regionPickerEl = document.querySelector("[data-region-picker]");
+      const regionSearchEl = document.querySelector("[data-region-search]");
+      const regionResultsEl = document.querySelector("[data-region-results]");
       const timelineControl = document.querySelector("[data-timeline-control]");
       const routeSlider = document.querySelector("[data-route-slider]");
       const routeDateEls = Array.from(document.querySelectorAll("[data-route-date]"));
-      const routeStartDateEl = document.querySelector("[data-route-start-date]");
-      const routeEndDateEl = document.querySelector("[data-route-end-date]");
       const routeStatEls = {
         currentStop: document.querySelector("[data-route-current-stop]"),
         days: document.querySelector("[data-route-days]"),
         kms: document.querySelector("[data-route-kms]"),
-        miles: document.querySelector("[data-route-miles]"),
         states: document.querySelector("[data-route-states]"),
         provinces: document.querySelector("[data-route-provinces]")
       };
@@ -1352,6 +1517,8 @@
       const regionGroups = new Map();
       let activePaths = [];
       let lastPhotoTrigger = null;
+      let currentDetailKey = null;
+      let highlightedRegionResultIndex = -1;
 
       const regionDetails = Object.fromEntries(uniqueKeys.map((key) => {
         const meta = regionMeta[key];
@@ -1491,10 +1658,109 @@
         { name: "Edmonton", region: "alberta", x: 360, y: 300, date: "2018-11-11" }
       ];
 
+      const britishColumbiaPhotos = [
+        "Photos/BC/IMG_1685.jpg",
+        "Photos/BC/IMG_1693.jpg",
+        "Photos/BC/IMG_1699.jpg",
+        "Photos/BC/IMG_1719.jpg",
+        "Photos/BC/IMG_1765.jpg",
+        "Photos/BC/IMG_1817.jpg",
+        "Photos/BC/IMG_1849.JPG",
+        "Photos/BC/IMG_1857.JPG",
+        "Photos/BC/IMG_1870.JPG",
+        "Photos/BC/IMG_1873.JPG",
+        "Photos/BC/IMG_1875.JPG",
+        "Photos/BC/IMG_1884.JPG",
+        "Photos/BC/IMG_1888.JPG",
+        "Photos/BC/IMG_1891.JPG",
+        "Photos/BC/IMG_1914.JPG",
+        "Photos/BC/IMG_1921.JPG",
+        "Photos/BC/IMG_1948.JPG",
+        "Photos/BC/IMG_1971.JPG",
+        "Photos/BC/IMG_1988.JPG",
+        "Photos/BC/IMG_1995.JPG",
+        "Photos/BC/IMG_2016.JPG",
+        "Photos/BC/IMG_2046.JPG",
+        "Photos/BC/IMG_2056.JPG",
+        "Photos/BC/IMG_2062.JPG",
+        "Photos/BC/IMG_2068.JPG",
+        "Photos/BC/IMG_2110.JPG",
+        "Photos/BC/IMG_2120.JPG"
+      ].map((src, index) => ({
+        src,
+        label: `British Columbia photo ${String(index + 1).padStart(2, "0")}`
+      }));
+
+      const northCarolinaPlaceholderPhotos = Array.from({ length: 10 }, (_, index) => ({
+        label: `North Carolina photo ${String(index + 1).padStart(2, "0")}`,
+        text: `Photo ${String(index + 1).padStart(2, "0")}`
+      }));
+
+      const regionStories = {
+        "british-columbia": {
+          eyebrow: "Photo journal",
+          title: "British Columbia",
+          intro: "Add the British Columbia writeup here. This section is set up for the first stretch of the trip through Hope, Vancouver, Salt Spring Island, and Victoria.",
+          sections: [
+            {
+              heading: "Into British Columbia",
+              copy: "Write the opening notes here: the first day out of Edmonton, the mountain crossing, and the feeling of reaching the coast.",
+              photos: britishColumbiaPhotos.slice(0, 1),
+              layout: "wide"
+            },
+            {
+              heading: "Vancouver and ferry days",
+              copy: "Use this space for city stops, ferries, island days, favorite food, campsites, weather, and any little moments you want to remember.",
+              photos: britishColumbiaPhotos.slice(1, 9)
+            },
+            {
+              heading: "Island notes",
+              copy: "Add the Salt Spring Island and Victoria part of the story here. This can be a few paragraphs, with the photo set sitting right below it.",
+              photos: britishColumbiaPhotos.slice(9, 18)
+            },
+            {
+              heading: "Before the border",
+              copy: "Use this final BC section for anything that closes out the Canadian west coast chapter before Seattle.",
+              photos: britishColumbiaPhotos.slice(18)
+            }
+          ]
+        },
+        "north-carolina": {
+          eyebrow: "Example article",
+          title: "Outer Banks To Blue Ridge",
+          sections: [
+            {
+              heading: "Outer Banks arrival",
+              copy: "Placeholder copy for the first stretch through North Carolina. This can hold the setup for the day, what the drive felt like, the weather, and the little details that made the stop memorable.",
+              photos: northCarolinaPlaceholderPhotos.slice(0, 1),
+              layout: "wide"
+            },
+            {
+              heading: "Coast to Raleigh",
+              copy: "Placeholder copy for the middle of the state. Add notes about the beach, the road inland, where you stayed, favorite meals, odd stops, and anything you want remembered in sequence.",
+              photos: northCarolinaPlaceholderPhotos.slice(1, 5)
+            },
+            {
+              heading: "Blue Ridge detour",
+              copy: "Placeholder copy for Asheville and the mountain side of the visit. This is a good spot for a short reflection, a route note, or a mini story that sits beside the photo set.",
+              photos: northCarolinaPlaceholderPhotos.slice(5, 10)
+            }
+          ]
+        }
+      };
+
+      const detailRegionOrder = routePoints.reduce((regions, point) => {
+        if (!point.region || !regionDetails[point.region]?.visited || regions.includes(point.region)) return regions;
+        regions.push(point.region);
+        return regions;
+      }, []);
+      const selectableRegionKeys = [...detailRegionOrder].sort((a, b) => {
+        return regionDetails[a].title.localeCompare(regionDetails[b].title);
+      });
+
       const routeTotals = {
         days: 316,
-        kms: 35000,
-        miles: 21750
+        kms: 35000
       };
       const dayMs = 24 * 60 * 60 * 1000;
       const numberFormatter = new Intl.NumberFormat("en-US");
@@ -1509,6 +1775,11 @@
         day: "numeric",
         timeZone: "UTC"
       });
+      const dayFormatter = new Intl.DateTimeFormat("en-US", {
+        day: "numeric",
+        timeZone: "UTC"
+      });
+      const detailKmsByRegion = getCumulativeKmsByRegion(routePoints, routeTotals.kms);
 
       hydrateRegionDates(routePoints);
 
@@ -1561,6 +1832,185 @@
         showTooltip(detail, event);
       }
 
+      function setActiveByKey(key) {
+        const detail = regionDetails[key];
+        const group = regionGroups.get(key);
+        if (!detail || !detail.visited || !group) return;
+
+        clearActive();
+        activePaths = group;
+        activePaths.forEach((active) => {
+          active.classList.add("is-active");
+          active.setAttribute("aria-pressed", "true");
+        });
+      }
+
+      function normalizeSearch(value) {
+        return value.trim().toLowerCase();
+      }
+
+      function getRegionSearchMatches(query) {
+        const normalizedQuery = normalizeSearch(query);
+        if (!normalizedQuery) return selectableRegionKeys;
+
+        return selectableRegionKeys.filter((key) => {
+          const detail = regionDetails[key];
+          const haystack = `${detail.title} ${detail.type} ${detail.country}`.toLowerCase();
+          return haystack.includes(normalizedQuery);
+        });
+      }
+
+      function getRegionResultButtons() {
+        if (!regionResultsEl) return [];
+        return Array.from(regionResultsEl.querySelectorAll("[data-region-result]"));
+      }
+
+      function setHighlightedRegionResult(index) {
+        const buttons = getRegionResultButtons();
+        if (!buttons.length || index < 0) {
+          highlightedRegionResultIndex = -1;
+          buttons.forEach((button) => button.classList.remove("is-highlighted"));
+          regionSearchEl?.removeAttribute("aria-activedescendant");
+          return;
+        }
+
+        highlightedRegionResultIndex = (index + buttons.length) % buttons.length;
+
+        buttons.forEach((button, buttonIndex) => {
+          const isHighlighted = buttonIndex === highlightedRegionResultIndex;
+          button.classList.toggle("is-highlighted", isHighlighted);
+          if (isHighlighted) {
+            button.scrollIntoView({ block: "nearest" });
+            regionSearchEl?.setAttribute("aria-activedescendant", button.id);
+          }
+        });
+      }
+
+      function showRegionResults() {
+        if (!regionResultsEl || !regionSearchEl) return;
+        regionResultsEl.hidden = false;
+        regionSearchEl.setAttribute("aria-expanded", "true");
+      }
+
+      function hideRegionResults() {
+        if (!regionResultsEl || !regionSearchEl) return;
+        regionResultsEl.hidden = true;
+        regionSearchEl.setAttribute("aria-expanded", "false");
+        regionSearchEl.removeAttribute("aria-activedescendant");
+        highlightedRegionResultIndex = -1;
+      }
+
+      function renderRegionResults(query) {
+        if (!regionResultsEl) return;
+
+        const matches = getRegionSearchMatches(query).slice(0, 12);
+        regionResultsEl.textContent = "";
+
+        if (!matches.length) {
+          const empty = document.createElement("div");
+          empty.className = "region-result-empty";
+          empty.textContent = "No matching regions";
+          regionResultsEl.appendChild(empty);
+          showRegionResults();
+          setHighlightedRegionResult(-1);
+          return;
+        }
+
+        matches.forEach((key, index) => {
+          const detail = regionDetails[key];
+          const button = document.createElement("button");
+          button.className = "region-result-button";
+          button.type = "button";
+          button.id = `region-result-${index}`;
+          button.dataset.regionResult = key;
+          button.setAttribute("role", "option");
+          button.textContent = detail.title;
+          button.addEventListener("mousedown", (event) => event.preventDefault());
+          button.addEventListener("click", () => {
+            openDetail(key);
+            hideRegionResults();
+          });
+          regionResultsEl.appendChild(button);
+        });
+
+        showRegionResults();
+        setHighlightedRegionResult(-1);
+      }
+
+      function syncRegionSearch(key) {
+        if (!regionSearchEl) return;
+        regionSearchEl.value = key ? regionDetails[key].title : "";
+        if (!key && document.activeElement !== regionSearchEl) regionSearchEl.placeholder = "";
+        hideRegionResults();
+      }
+
+      function getAdjacentRegionKey(key, offset) {
+        if (!detailRegionOrder.length) return null;
+
+        const currentIndex = detailRegionOrder.includes(key) ? detailRegionOrder.indexOf(key) : 0;
+        const nextIndex = (currentIndex + offset + detailRegionOrder.length) % detailRegionOrder.length;
+        return detailRegionOrder[nextIndex];
+      }
+
+      function updateDetailNavigation(key) {
+        const previousKey = getAdjacentRegionKey(key, -1);
+        const nextKey = getAdjacentRegionKey(key, 1);
+
+        if (detailPreviousButton && previousKey) {
+          detailPreviousButton.setAttribute("aria-label", `Previous: ${regionDetails[previousKey].title}`);
+          detailPreviousButton.title = regionDetails[previousKey].title;
+        }
+
+        if (detailNextButton && nextKey) {
+          detailNextButton.setAttribute("aria-label", `Next: ${regionDetails[nextKey].title}`);
+          detailNextButton.title = regionDetails[nextKey].title;
+        }
+      }
+
+      function getDetailOrderValue(key) {
+        const detail = regionDetails[key];
+        const detailIndex = detailRegionOrder.indexOf(key);
+        if (!detail || detailIndex < 0) return "Region";
+
+        const typeCount = detailRegionOrder.slice(0, detailIndex + 1).filter((region) => {
+          return regionDetails[region]?.type === detail.type;
+        }).length;
+
+        if (detail.type === "U.S. state") return `State #${typeCount}`;
+        if (detail.type === "Canadian province") return `Province #${typeCount}`;
+        if (detail.type === "Canadian territory") return `Territory #${typeCount}`;
+        return `Region #${detailIndex + 1}`;
+      }
+
+      function getCumulativeKmsByRegion(points, totalKms) {
+        const totalDistance = points.reduce((sum, point, index) => {
+          if (index === 0) return sum;
+          return sum + getDistance(points[index - 1], point);
+        }, 0);
+        const kmsByRegion = new Map();
+        let travelled = 0;
+
+        if (points[0]?.region) kmsByRegion.set(points[0].region, 0);
+
+        points.forEach((point, index) => {
+          if (index === 0) return;
+
+          travelled += getDistance(points[index - 1], point);
+          if (!point.region || !regionDetails[point.region]?.visited) return;
+
+          const cumulativeKms = totalDistance ? (totalKms * travelled) / totalDistance : 0;
+          kmsByRegion.set(point.region, cumulativeKms);
+        });
+
+        return kmsByRegion;
+      }
+
+      function getDetailKmsValue(key) {
+        const kms = detailKmsByRegion.get(key);
+        if (typeof kms !== "number") return "To be filled";
+        return formatDistance(roundTo(kms, 100), "km");
+      }
+
       function getGroupBox(group) {
         const boxes = group.map((item) => item.getBBox());
         const minX = Math.min(...boxes.map((box) => box.x));
@@ -1569,7 +2019,7 @@
         const maxY = Math.max(...boxes.map((box) => box.y + box.height));
         const width = Math.max(maxX - minX, 1);
         const height = Math.max(maxY - minY, 1);
-        const padding = Math.max(width, height) * 0.16;
+        const padding = Math.max(width, height) * 0.04;
 
         return {
           x: minX - padding,
@@ -1601,32 +2051,212 @@
         });
       }
 
-      function openDetail(key) {
-        const detail = regionDetails[key];
-        if (!detail || !detailView) return;
+      function fitDetailTitle() {
+        if (!detailTitleEl) return;
 
+        detailTitleEl.style.fontSize = "";
+
+        const availableWidth = detailTitleEl.parentElement?.clientWidth || detailTitleEl.clientWidth;
+        if (!availableWidth) return;
+
+        const baseSize = parseFloat(window.getComputedStyle(detailTitleEl).fontSize);
+        let scale = 1;
+        while (detailTitleEl.scrollWidth > availableWidth && scale > 0.56) {
+          scale -= 0.02;
+          detailTitleEl.style.fontSize = `${baseSize * scale}px`;
+        }
+      }
+
+      function createTextElement(tagName, className, text) {
+        const element = document.createElement(tagName);
+        if (className) element.className = className;
+        element.textContent = text;
+        return element;
+      }
+
+      function createStoryPhotoButton(photo, index, isWide = false) {
+        const label = photo.label || `Photo ${String(index + 1).padStart(2, "0")}`;
+        const button = document.createElement("button");
+
+        button.className = `story-photo${isWide ? " is-wide" : ""}${photo.src ? " has-image" : ""}`;
+        button.type = "button";
+        button.dataset.photoFullscreen = "";
+        button.dataset.photoLabel = label;
+        button.setAttribute("aria-label", `Open ${label}`);
+
+        if (photo.src) {
+          const image = document.createElement("img");
+          image.src = photo.src;
+          image.alt = label;
+          image.loading = "lazy";
+          image.decoding = "async";
+          button.dataset.photoSrc = photo.src;
+          button.appendChild(image);
+        } else {
+          button.appendChild(createTextElement("span", "", photo.text || label));
+        }
+
+        return button;
+      }
+
+      function appendStoryPhotos(section, container) {
+        const photos = section.photos || [];
+        if (!photos.length) return;
+
+        if (section.layout === "wide" && photos[0]) {
+          container.appendChild(createStoryPhotoButton(photos[0], 0, true));
+          return;
+        }
+
+        const grid = document.createElement("div");
+        grid.className = "story-photos";
+        grid.setAttribute("aria-label", `${section.heading} photos`);
+
+        photos.forEach((photo, index) => {
+          grid.appendChild(createStoryPhotoButton(photo, index));
+        });
+
+        container.appendChild(grid);
+      }
+
+      function renderRegionStory(key) {
+        if (!stateStoryEl) return false;
+
+        const story = regionStories[key];
+        stateStoryEl.textContent = "";
+        if (!story) return false;
+
+        if (story.eyebrow) {
+          stateStoryEl.appendChild(createTextElement("p", "detail-overline", story.eyebrow));
+        }
+
+        stateStoryEl.appendChild(createTextElement("h3", "story-title", story.title));
+
+        if (story.intro) {
+          stateStoryEl.appendChild(createTextElement("p", "story-intro", story.intro));
+        }
+
+        story.sections.forEach((section) => {
+          const sectionEl = document.createElement("section");
+          const copyEl = document.createElement("div");
+
+          sectionEl.className = "story-section";
+          copyEl.className = "story-copy";
+          copyEl.appendChild(createTextElement("h4", "", section.heading));
+          copyEl.appendChild(createTextElement("p", "", section.copy));
+          sectionEl.appendChild(copyEl);
+          appendStoryPhotos(section, sectionEl);
+          stateStoryEl.appendChild(sectionEl);
+        });
+
+        return true;
+      }
+
+      function openDetail(key, { focusCloseButton = true } = {}) {
+        const detail = regionDetails[key];
+        if (!detail || !detail.visited || !detailView || !regionGroups.has(key)) return;
+
+        currentDetailKey = key;
+        setActiveByKey(key);
+        syncRegionSearch(key);
+        updateDetailNavigation(key);
         renderDetailMap(key);
         detailView.style.setProperty("--detail-accent", detail.accent);
         detailTitleEl.textContent = detail.title;
-        detailTypeEl.textContent = detail.kicker;
+        if (detailOrderEl) detailOrderEl.textContent = getDetailOrderValue(key);
         detailDatesEl.textContent = detail.dates;
-        detailDistanceEl.textContent = detail.kms;
+        if (detailKmsEl) detailKmsEl.textContent = getDetailKmsValue(key);
 
-        const showStory = key === "north-carolina";
+        const showStory = renderRegionStory(key);
         if (detailPlaceholderEl) detailPlaceholderEl.hidden = showStory;
         if (stateStoryEl) stateStoryEl.hidden = !showStory;
         detailView.classList.toggle("story-open", showStory);
 
         detailView.setAttribute("aria-hidden", "false");
         document.body.classList.add("detail-open");
-        closeDetailButton.focus({ preventScroll: true });
+        requestAnimationFrame(fitDetailTitle);
+        if (focusCloseButton) closeDetailButton?.focus({ preventScroll: true });
+      }
+
+      function navigateDetail(offset) {
+        const nextKey = getAdjacentRegionKey(currentDetailKey, offset);
+        if (!nextKey) return;
+        openDetail(nextKey, { focusCloseButton: false });
+      }
+
+      function setupRegionSearch() {
+        if (!regionSearchEl || !regionResultsEl) return;
+
+        regionSearchEl.addEventListener("focus", () => {
+          regionSearchEl.placeholder = regionSearchEl.dataset.searchPlaceholder || "";
+          renderRegionResults(regionSearchEl.value);
+        });
+
+        regionSearchEl.addEventListener("blur", () => {
+          if (!regionSearchEl.value) regionSearchEl.placeholder = "";
+        });
+
+        regionSearchEl.addEventListener("input", () => {
+          renderRegionResults(regionSearchEl.value);
+        });
+
+        regionSearchEl.addEventListener("keydown", (event) => {
+          const buttons = getRegionResultButtons();
+
+          if (event.key === "Escape") {
+            hideRegionResults();
+            return;
+          }
+
+          if (event.key === "ArrowDown") {
+            event.preventDefault();
+            if (regionResultsEl.hidden) renderRegionResults(regionSearchEl.value);
+            setHighlightedRegionResult(highlightedRegionResultIndex + 1);
+            return;
+          }
+
+          if (event.key === "ArrowUp") {
+            event.preventDefault();
+            if (regionResultsEl.hidden) renderRegionResults(regionSearchEl.value);
+            setHighlightedRegionResult(highlightedRegionResultIndex - 1);
+            return;
+          }
+
+          if (event.key !== "Enter") return;
+
+          if (highlightedRegionResultIndex >= 0 && buttons[highlightedRegionResultIndex]) {
+            event.preventDefault();
+            buttons[highlightedRegionResultIndex].click();
+          }
+        });
+
+        document.addEventListener("pointerdown", (event) => {
+          if (!regionPickerEl || regionPickerEl.contains(event.target)) return;
+          hideRegionResults();
+        });
       }
 
       function openPhotoLightbox(trigger) {
         if (!photoLightbox || !photoLightboxLabel) return;
 
         lastPhotoTrigger = trigger;
-        photoLightboxLabel.textContent = trigger.dataset.photoLabel || trigger.textContent.trim() || "Photo placeholder";
+        const label = trigger.dataset.photoLabel || trigger.textContent.trim() || "Photo placeholder";
+        const photoSrc = trigger.dataset.photoSrc;
+
+        photoLightboxLabel.textContent = label;
+
+        if (photoSrc && photoLightboxImage) {
+          photoLightboxImage.src = photoSrc;
+          photoLightboxImage.alt = label;
+          photoLightbox.classList.add("has-image");
+        } else {
+          photoLightbox.classList.remove("has-image");
+          if (photoLightboxImage) {
+            photoLightboxImage.removeAttribute("src");
+            photoLightboxImage.alt = "";
+          }
+        }
+
         photoLightbox.hidden = false;
         photoLightbox.setAttribute("aria-hidden", "false");
         photoLightboxCloseButton?.focus({ preventScroll: true });
@@ -1637,6 +2267,12 @@
 
         photoLightbox.hidden = true;
         photoLightbox.setAttribute("aria-hidden", "true");
+        photoLightbox.classList.remove("has-image");
+
+        if (photoLightboxImage) {
+          photoLightboxImage.removeAttribute("src");
+          photoLightboxImage.alt = "";
+        }
 
         if (restoreFocus && lastPhotoTrigger) {
           lastPhotoTrigger.focus({ preventScroll: true });
@@ -1649,11 +2285,14 @@
         if (!detailView) return;
 
         closePhotoLightbox({ restoreFocus: false });
+        currentDetailKey = null;
+        syncRegionSearch(null);
         document.body.classList.remove("detail-open");
         detailView.classList.remove("story-open");
         detailView.setAttribute("aria-hidden", "true");
         if (stateStoryEl) stateStoryEl.hidden = true;
         if (detailPlaceholderEl) detailPlaceholderEl.hidden = false;
+        if (detailTitleEl) detailTitleEl.style.fontSize = "";
         clearActive();
       }
 
@@ -1725,6 +2364,25 @@
         return shortDateFormatter.format(parseTripDate(dateString));
       }
 
+      function formatDateRangeLabel(firstDate, lastDate) {
+        if (firstDate === lastDate) return formatDateLabel(firstDate);
+
+        const start = parseTripDate(firstDate);
+        const end = parseTripDate(lastDate);
+        const sameYear = start.getUTCFullYear() === end.getUTCFullYear();
+        const sameMonth = sameYear && start.getUTCMonth() === end.getUTCMonth();
+
+        if (sameMonth) {
+          return `${formatShortDateLabel(firstDate)} - ${dayFormatter.format(end)}, ${end.getUTCFullYear()}`;
+        }
+
+        if (sameYear) {
+          return `${formatShortDateLabel(firstDate)} - ${formatShortDateLabel(lastDate)}, ${end.getUTCFullYear()}`;
+        }
+
+        return `${formatDateLabel(firstDate)} - ${formatDateLabel(lastDate)}`;
+      }
+
       function formatTimelineDate(startDate, timelineDay) {
         const dayOffset = Math.floor(timelineDay + 0.0001);
         return dateFormatter.format(new Date(startDate.getTime() + (dayOffset * dayMs)));
@@ -1744,9 +2402,7 @@
           const firstDate = sortedDates[0];
           const lastDate = sortedDates[sortedDates.length - 1];
 
-          regionDetails[region].dates = firstDate === lastDate
-            ? formatDateLabel(firstDate)
-            : `${formatDateLabel(firstDate)} to ${formatDateLabel(lastDate)}`;
+          regionDetails[region].dates = formatDateRangeLabel(firstDate, lastDate);
         });
       }
 
@@ -1931,7 +2587,6 @@
         const timelineProgress = timelineState.progress ?? progress;
         const days = Math.round(routeTotals.days * timelineProgress);
         const kms = progress >= 0.9995 ? routeTotals.kms : roundTo(routeTotals.kms * progress, 100);
-        const miles = progress >= 0.9995 ? routeTotals.miles : roundTo(routeTotals.miles * progress, 50);
         const currentStop = timelineState.stop || getCurrentStop(stops, progress);
 
         if (routeStatEls.currentStop) routeStatEls.currentStop.textContent = formatStop(currentStop);
@@ -1940,7 +2595,6 @@
         });
         if (routeStatEls.days) routeStatEls.days.textContent = `${days} ${days === 1 ? "day" : "days"}`;
         if (routeStatEls.kms) routeStatEls.kms.textContent = formatDistance(kms, "km");
-        if (routeStatEls.miles) routeStatEls.miles.textContent = formatDistance(miles, "miles");
         if (routeStatEls.states) routeStatEls.states.textContent = formatWholeNumber(getRegionCount(enteredRegions, "U.S. state"));
         if (routeStatEls.provinces) routeStatEls.provinces.textContent = formatWholeNumber(getRegionCount(enteredRegions, "Canadian province"));
       }
@@ -1972,8 +2626,6 @@
         routeSlider.min = String(timelineMetrics.min);
         routeSlider.max = String(timelineMetrics.max);
         routeSlider.step = "0.1";
-        if (routeStartDateEl) routeStartDateEl.textContent = formatShortDateLabel(routePoints[0].date);
-        if (routeEndDateEl) routeEndDateEl.textContent = formatShortDateLabel(routePoints[routePoints.length - 1].date);
 
         function renderTimeline(timelineDay) {
           const activeDay = clamp(timelineDay, timelineMetrics.min, timelineMetrics.max);
@@ -2062,10 +2714,16 @@
         }
       });
 
+      setupRegionSearch();
       setupRouteTimeline();
 
-      document.querySelectorAll("[data-photo-fullscreen]").forEach((button) => {
-        button.addEventListener("click", () => openPhotoLightbox(button));
+      detailPreviousButton?.addEventListener("click", () => navigateDetail(-1));
+      detailNextButton?.addEventListener("click", () => navigateDetail(1));
+
+      stateStoryEl?.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-photo-fullscreen]");
+        if (!button || !stateStoryEl.contains(button)) return;
+        openPhotoLightbox(button);
       });
 
       if (photoLightboxCloseButton) {
@@ -2078,16 +2736,34 @@
         });
       }
 
+      window.addEventListener("resize", () => {
+        if (document.body.classList.contains("detail-open")) fitDetailTitle();
+      });
+
       closeDetailButton.addEventListener("click", closeDetail);
       document.addEventListener("keydown", (event) => {
-        if (event.key !== "Escape") return;
+        if (event.key === "Escape") {
+          if (photoLightbox && !photoLightbox.hidden) {
+            closePhotoLightbox();
+            return;
+          }
 
-        if (photoLightbox && !photoLightbox.hidden) {
-          closePhotoLightbox();
+          closeDetail();
           return;
         }
 
-        closeDetail();
+        if (photoLightbox && !photoLightbox.hidden) return;
+        if (!document.body.classList.contains("detail-open")) return;
+
+        if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          navigateDetail(-1);
+        }
+
+        if (event.key === "ArrowRight") {
+          event.preventDefault();
+          navigateDetail(1);
+        }
       });
     })();
   </script>
